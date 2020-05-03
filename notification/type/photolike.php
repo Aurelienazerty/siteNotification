@@ -63,27 +63,11 @@ class photolike extends \phpbb\notification\type\base
 	{
 		return false;
 	}
-	
-	/**
-	 * {@inheritdoc}
-	 */
-	public function get_type()
-	{
-		return 'aurelienazerty.sitenotification.notification.type.photolike';
-	}
 
 
 	public function set_user_loader(\phpbb\user_loader $user_loader)
 	{
 		$this->user_loader = $user_loader;
-	}
-	
-	/**
-	 * {@inheritdoc}
-	 */
-	public function is_available()
-	{
-		return true;
 	}
 
 
