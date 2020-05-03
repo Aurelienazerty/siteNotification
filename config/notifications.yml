@@ -1,0 +1,9 @@
+services:
+    aurelienazerty.sitenotification.notification.type.photolike:
+        class: aurelienazerty\sitenotification\notification\type\photolike
+        shared: false
+        parent: notification.type.base
+        calls:
+            - ['set_user_loader', ['@user_loader']]
+        tags:
+            - { name: notification.type }

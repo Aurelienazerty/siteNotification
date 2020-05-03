@@ -1,9 +1,10 @@
+imports:
+    - { resource: notifications.yml }
 services:
-    Aurelienazerty.siteNotification.notification.type.sample:
-        class: Aurelienazerty\siteNotification\notification\type\sample
-        shared: false # service MUST not be shared for this to work!
-        parent: notification.type.base
-        calls:
-            - [set_controller_helper, ['@controller.helper']]
+    aurelienazerty.sitenotification.listener:
+        class: aurelienazerty\sitenotification\event\listener
+        arguments:
+            - '@dbal.conn'
+            - '@user'
         tags:
-            - { name: notification.type }
+            - { name: event.listener }

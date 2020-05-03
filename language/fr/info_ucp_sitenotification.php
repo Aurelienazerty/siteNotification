@@ -3,7 +3,7 @@
  *
  * Notification du site. An extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2019, Aurelienazerty, https://www.team-azerty.com
+ * @copyright (c) 2019, aurelienazerty, https://www.team-azerty.com
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -35,5 +35,6 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'NOTIFICATION_TYPE_SITENOTIFICATION_PHOTO'	=> 'Recevoir les notifications lors d’un like sur un de vos commentaires',
+	'AURELIENAZERTY_SITENOTIFICATION_NOTIFICATIONS_PHOTOLIKE'	=> "Recevoir les notifications lors d'un réaction sur un de vos commentaires",
+	'NOTIFICATION_TYPE_AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE'	=> "Quelqu'un a réagi à l'un de vos commentaires",
 ));

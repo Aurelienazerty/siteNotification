@@ -3,17 +3,17 @@
  *
  * Notification du site. An extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2019, Aurelienazerty, https://www.team-azerty.com
+ * @copyright (c) 2019, aurelienazerty, https://www.team-azerty.com
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
 
-namespace Aurelienazerty\siteNotification\notification\type;
+namespace aurelienazerty\sitenotification\notification\type;
 
 /**
  * Notification du site Notification class.
  */
-class sample extends \phpbb\notification\type\base
+class photolike extends \phpbb\notification\type\base
 {
 	/** @var \phpbb\controller\helper */
 	protected $helper;
@@ -37,7 +37,7 @@ class sample extends \phpbb\notification\type\base
 	 */
 	public function get_type()
 	{
-		return 'Aurelienazerty.siteNotification.notification.type.photo';
+		return 'aurelienazerty.sitenotification.notification.type.photolike';
 	}
 
 	/**
@@ -47,8 +47,12 @@ class sample extends \phpbb\notification\type\base
 	 * 					Array of data (including keys 'id', 'lang', and 'group')
 	 */
 	public static $notification_option = array(
-		'lang'	=> 'NOTIFICATION_TYPE_SITENOTIFICATION_PHOTO',
+		'lang'	=> 'NOTIFICATION_TYPE_AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE',
+		'group'	=> 'NOTIFICATION_GROUP_POSTING',
 	);
+	
+	/** @var \phpbb\user_loader */
+	protected $user_loader;
 
 	/**
 	 * Is this type available to the current user (defines whether or not it will be shown in the UCP Edit notification options)
@@ -59,31 +63,29 @@ class sample extends \phpbb\notification\type\base
 	{
 		return false;
 	}
-
+	
 	/**
-	 * Get the id of the notification
-	 *
-	 * @param array $data The type specific data
-	 *
-	 * @return int Id of the notification
+	 * {@inheritdoc}
 	 */
-	public static function get_item_id($data)
+	public function get_type()
 	{
-		return $data['notification_id'];
+		return 'aurelienazerty.sitenotification.notification.type.photolike';
 	}
 
-	/**
-	 * Get the id of the parent
-	 *
-	 * @param array $data The type specific data
-	 *
-	 * @return int Id of the parent
-	 */
-	public static function get_item_parent_id($data)
+
+	public function set_user_loader(\phpbb\user_loader $user_loader)
 	{
-		// No parent
-		return 0;
+		$this->user_loader = $user_loader;
 	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function is_available()
+	{
+		return true;
+	}
+
 
 	/**
 	 * Find the users who want to receive notifications
@@ -98,7 +100,7 @@ class sample extends \phpbb\notification\type\base
 	public function find_users_for_notification($data, $options = array())
 	{
 		// Return an array of users to be notified, storing the user_ids as the array keys
-		return array();
+		return $this->check_user_notification_options(array($this->get_data('owner_commentaire_id')), $options);
 	}
 
 	/**
@@ -108,7 +110,7 @@ class sample extends \phpbb\notification\type\base
 	 */
 	public function users_to_query()
 	{
-		return array();
+		return array($this->get_data('liker_id'));
 	}
 
 	/**
@@ -118,7 +120,10 @@ class sample extends \phpbb\notification\type\base
 	 */
 	public function get_title()
 	{
-		return $this->language->lang('AURELIENAZERTY_SITENOTIFICATION_PHOTO');
+		return $this->language->lang(
+			'AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE_TEXT',
+			$this->user_loader->get_username($this->get_data('liker_id'), 'no_profile')
+		);
 	}
 
 	/**
@@ -128,7 +133,7 @@ class sample extends \phpbb\notification\type\base
 	 */
 	public function get_url()
 	{
-		return $this->helper->route('Aurelienazerty_siteNotification_controller', $this->get_data('sitenotification_photo_name'));
+		return "/images/view-" . $this->get_data('photo_id') . ".html#" . $this->get_data('commentaire_id');
 	}
 
 	/**
@@ -150,6 +155,38 @@ class sample extends \phpbb\notification\type\base
 	{
 		return array();
 	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function get_avatar()
+	{
+		return $this->user_loader->get_avatar($this->get_data('liker_id'), false, true);
+	}
+	
+	/**
+	 * Get the id of the notification
+	 *
+	 * @param array $data The type specific data
+	 *
+	 * @return int Id of the notification
+	 */
+	public static function get_item_id($data)
+	{
+		return (int) $data['notification_id'];
+	}
+
+	/**
+	 * Get the id of the parent
+	 *
+	 * @param array $data The type specific data
+	 *
+	 * @return int Id of the parent
+	 */
+	public static function get_item_parent_id($data)
+	{
+		return (int) $data['photo_id'];
+	}
 
 	/**
 	 * Function for preparing the data for insertion in an SQL query
@@ -160,7 +197,12 @@ class sample extends \phpbb\notification\type\base
 	 */
 	public function create_insert_array($data, $pre_create_data = array())
 	{
-		$this->set_data('sitenotification_photo_name', $data['sitenotification_photo_name']);
+		$this->set_data('photo_id', $data['photo_id']);
+		$this->set_data('liker_id', $data['liker_id']);		
+		$this->set_data('commentaire_id', $data['commentaire_id']);
+		$this->set_data('commentaire_id', $data['owner_commentaire_id']);
+		$this->set_data('reaction_type', $data['reaction_type']);
+		$this->set_data('reaction_type_title', $data['reaction_type_title']);
 
 		parent::create_insert_array($data, $pre_create_data);
 	}
