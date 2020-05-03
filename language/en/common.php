@@ -36,6 +36,8 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 
+	'NOTIFICATION_TYPE_AURELIENAZERTY_SITENOTIFICATION' => 'Notification via le site',
+
 	'AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE'	=> 'Notification d’une nouvelle réaction',
 	'AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE_TEXT'	=> '<strong>Réaction</strong> de %1$s à votre commentaire',
 	'AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE_LIKE_TEXT'	=> 'a aimé',

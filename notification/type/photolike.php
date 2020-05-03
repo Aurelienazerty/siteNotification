@@ -48,7 +48,7 @@ class photolike extends \phpbb\notification\type\base
 	 */
 	public static $notification_option = array(
 		'lang'	=> 'NOTIFICATION_TYPE_AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE',
-		'group'	=> 'NOTIFICATION_GROUP_POSTING',
+		'group'	=> 'NOTIFICATION_TYPE_AURELIENAZERTY_SITENOTIFICATION',
 	);
 	
 	/** @var \phpbb\user_loader */
@@ -61,7 +61,7 @@ class photolike extends \phpbb\notification\type\base
 	 */
 	public function is_available()
 	{
-		return false;
+		return true;
 	}
 
 
