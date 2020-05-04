@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Notification du site. An extension for the phpBB Forum Software package.
+ * Topic/Post Reactions. An extension for the phpBB Forum Software package.
+ * French translation by Galixte (http://www.galixte.com)
  *
- * @copyright (c) 2019, aurelienazerty, https://www.team-azerty.com
+ * @copyright (c) 2017 Steve <http://www.steven-clark.online/phpBB3-Extensions/>
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
 
+/**
+ * DO NOT CHANGE
+ */
 if (!defined('IN_PHPBB'))
 {
 	exit;
@@ -31,15 +35,9 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 //
 // Some characters you may want to copy&paste:
-// ’ » “ ” …
+// ’ « » “ ” …
 //
 
 $lang = array_merge($lang, array(
-
-	'NOTIFICATION_TYPE_AURELIENAZERTY_SITENOTIFICATION' => 'Notification via le site',
-
-	'AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE'	=> 'Notification d’une nouvelle réaction',
-	'AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE_TEXT'	=> '<strong>Réaction</strong> de %1$s à votre commentaire',
-	'AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE_LIKE_TEXT'	=> 'a aimé',
-	'AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE_DISLIKE_TEXT'	=> "n'a pas aimé",
+	'AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE_TEXT'	=> '<strong>Nouvelle réaction</strong>: %1$s de %2$s à votre commentaire sur une photo',
 ));

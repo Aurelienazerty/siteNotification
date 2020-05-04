@@ -4,6 +4,8 @@ services:
         shared: false
         parent: notification.type.base
         calls:
-            - ['set_user_loader', ['@user_loader']]
+            - [set_config, ['@config']]
+            - [set_user_loader, ['@user_loader']]
+            - [set_controller_helper, ['@controller.helper']]
         tags:
             - { name: notification.type }

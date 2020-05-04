@@ -15,21 +15,6 @@ namespace aurelienazerty\sitenotification\notification\type;
  */
 class photolike extends \phpbb\notification\type\base
 {
-	/** @var \phpbb\controller\helper */
-	protected $helper;
-
-	/**
-	 * Set the controller helper
-	 *
-	 * @param \phpbb\controller\helper $helper
-	 *
-	 * @return void
-	 */
-	public function set_controller_helper(\phpbb\controller\helper $helper)
-	{
-		$this->helper = $helper;
-	}
-
 	/**
 	 * Get notification type name
 	 *
@@ -38,6 +23,25 @@ class photolike extends \phpbb\notification\type\base
 	public function get_type()
 	{
 		return 'aurelienazerty.sitenotification.notification.type.photolike';
+	}
+	
+	protected $helper;
+	protected $user_loader;
+	protected $config;
+
+	public function set_controller_helper(\phpbb\controller\helper $helper)
+	{
+		$this->helper = $helper;
+	}
+	
+	public function set_user_loader(\phpbb\user_loader $user_loader)
+	{
+		$this->user_loader = $user_loader;
+	}
+	
+	public function set_config(\phpbb\config\config $config)
+	{
+		$this->config = $config;
 	}
 
 	/**
@@ -50,9 +54,6 @@ class photolike extends \phpbb\notification\type\base
 		'lang'	=> 'NOTIFICATION_TYPE_AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE',
 		'group'	=> 'NOTIFICATION_TYPE_AURELIENAZERTY_SITENOTIFICATION',
 	);
-	
-	/** @var \phpbb\user_loader */
-	protected $user_loader;
 
 	/**
 	 * Is this type available to the current user (defines whether or not it will be shown in the UCP Edit notification options)
@@ -62,12 +63,6 @@ class photolike extends \phpbb\notification\type\base
 	public function is_available()
 	{
 		return true;
-	}
-
-
-	public function set_user_loader(\phpbb\user_loader $user_loader)
-	{
-		$this->user_loader = $user_loader;
 	}
 
 
@@ -84,7 +79,7 @@ class photolike extends \phpbb\notification\type\base
 	public function find_users_for_notification($data, $options = array())
 	{
 		// Return an array of users to be notified, storing the user_ids as the array keys
-		return $this->check_user_notification_options(array($this->get_data('owner_commentaire_id')), $options);
+		return $this->check_user_notification_options(array($data['owner_commentaire_id']), $options);
 	}
 
 	/**
@@ -104,10 +99,15 @@ class photolike extends \phpbb\notification\type\base
 	 */
 	public function get_title()
 	{
-		return $this->language->lang(
-			'AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE_TEXT',
-			$this->user_loader->get_username($this->get_data('liker_id'), 'no_profile')
-		);
+		$username = $this->user_loader->get_username($this->get_data('liker_id'), 'no_profile');
+		$reaction = $this->get_data('reaction_type');
+		if ($reaction == 'like') {
+			$smiley  = "👍";
+		} else {
+			$smiley  = "👎";
+		}
+		$title = sprintf($this->language->lang('AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE_TEXT', $smiley, $username));
+		return $title;
 	}
 
 	/**
@@ -117,7 +117,7 @@ class photolike extends \phpbb\notification\type\base
 	 */
 	public function get_url()
 	{
-		return "/images/view-" . $this->get_data('photo_id') . ".html#" . $this->get_data('commentaire_id');
+		return "/images/view-" . $this->get_data('photo_id') . ".html#com" . $this->get_data('commentaire_id');
 	}
 
 	/**
@@ -157,7 +157,7 @@ class photolike extends \phpbb\notification\type\base
 	 */
 	public static function get_item_id($data)
 	{
-		return (int) $data['notification_id'];
+		return (int) $data['commentaire_id'];
 	}
 
 	/**
@@ -184,9 +184,10 @@ class photolike extends \phpbb\notification\type\base
 		$this->set_data('photo_id', $data['photo_id']);
 		$this->set_data('liker_id', $data['liker_id']);		
 		$this->set_data('commentaire_id', $data['commentaire_id']);
-		$this->set_data('commentaire_id', $data['owner_commentaire_id']);
+		$this->set_data('owner_commentaire_id', $data['owner_commentaire_id']);
 		$this->set_data('reaction_type', $data['reaction_type']);
-		$this->set_data('reaction_type_title', $data['reaction_type_title']);
+		
+		$this->db->sql_query("SET NAMES 'utf8mb4'");
 
 		parent::create_insert_array($data, $pre_create_data);
 	}

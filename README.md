@@ -1,6 +1,10 @@
 # Notification du site
 
-Version de dev.
+## Installation
+
+Copy the extension to phpBB/ext/Aurelienazerty/siteNotification
+
+Go to "ACP" > "Customise" > "Extensions" and enable the "Notification du site" extension.
 
 ## License
 
