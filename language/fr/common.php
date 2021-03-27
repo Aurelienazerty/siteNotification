@@ -40,4 +40,6 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE_TEXT'	=> '<strong>Nouvelle réaction</strong>: %1$s de %2$s à votre commentaire sur une photo',
+	'AURELIENAZERTY_SITENOTIFICATION_OLDPRONO_TEXT'	=> '<strong>Pronostique ancien</strong>: %1$s',
+	'AURELIENAZERTY_SITENOTIFICATION_NOPRONO_TEXT'	=> '<strong>Pas de prono</strong>: %1$s',
 ));

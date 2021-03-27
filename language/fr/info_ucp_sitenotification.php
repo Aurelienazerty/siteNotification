@@ -38,4 +38,6 @@ $lang = array_merge($lang, array(
 	'NOTIFICATION_TYPE_AURELIENAZERTY_SITENOTIFICATION' => 'Notification via le site',
 	
 	'NOTIFICATION_TYPE_AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE'	=> "Quelqu'un a réagi à l'un de vos commentaires",
+	'NOTIFICATION_TYPE_AURELIENAZERTY_SITENOTIFICATION_OLDPRONO' => "En cas de pronostique ancien",
+	'NOTIFICATION_TYPE_AURELIENAZERTY_SITENOTIFICATION_NOPRONO' => "En cas d'absence de prono",
 ));

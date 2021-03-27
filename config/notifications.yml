@@ -9,3 +9,25 @@ services:
             - [set_controller_helper, ['@controller.helper']]
         tags:
             - { name: notification.type }
+
+    aurelienazerty.sitenotification.notification.type.oldprono:
+        class: aurelienazerty\sitenotification\notification\type\oldprono
+        shared: false
+        parent: notification.type.base
+        calls:
+            - [set_config, ['@config']]
+            - [set_user_loader, ['@user_loader']]
+            - [set_controller_helper, ['@controller.helper']]
+        tags:
+            - { name: notification.type }
+            
+    aurelienazerty.sitenotification.notification.type.noprono:
+        class: aurelienazerty\sitenotification\notification\type\noprono
+        shared: false
+        parent: notification.type.base
+        calls:
+            - [set_config, ['@config']]
+            - [set_user_loader, ['@user_loader']]
+            - [set_controller_helper, ['@controller.helper']]
+        tags:
+            - { name: notification.type }

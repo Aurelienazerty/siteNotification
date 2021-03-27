@@ -3,8 +3,8 @@
     "type": "phpbb-extension",
     "description": "Notifie en cas de like sur un commenraire, et pour pronofoot",
     "homepage": "https://www.team-azerty.com",
-    "version": "1.0.0-dev",
-    "time": "2019-06-09",
+    "version": "1.0.0",
+    "time": "2021-03-27",
     "license": "GPL-2.0-only",
     "authors": [
         {
