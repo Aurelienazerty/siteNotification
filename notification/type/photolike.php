@@ -69,17 +69,17 @@ class photolike extends \phpbb\notification\type\base
 	/**
 	 * Find the users who want to receive notifications
 	 *
-	 * @param array $data The type specific data
+	 * @param array $type_data The type specific data
 	 * @param array $options Options for finding users for notification
 	 * 		ignore_users => array of users and user types that should not receive notifications from this type because they've already been notified
 	 * 						e.g.: array(2 => array(''), 3 => array('', 'email'), ...)
 	 *
 	 * @return array
 	 */
-	public function find_users_for_notification($data, $options = array())
+	public function find_users_for_notification($type_data, $options = array())
 	{
 		// Return an array of users to be notified, storing the user_ids as the array keys
-		return $this->check_user_notification_options(array($data['owner_commentaire_id']), $options);
+		return $this->check_user_notification_options(array($type_data['owner_commentaire_id']), $options);
 	}
 
 	/**
@@ -101,13 +101,36 @@ class photolike extends \phpbb\notification\type\base
 	{
 		$username = $this->user_loader->get_username($this->get_data('liker_id'), 'no_profile');
 		$reaction = $this->get_data('reaction_type');
-		if ($reaction == 'like') {
-			$smiley  = "👍";
-		} else {
-			$smiley  = "👎";
+		
+		$sql_array = array(
+			'SELECT'	=> 'r.*',
+			'FROM'		=> array('phpbb_reaction_types' => 'r'),
+			'WHERE' => 'r.reaction_type_id = ' . (int) $reaction,
+		);
+		
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
+		$smiley = $this->db->sql_fetchfield('reaction_file_name');
+		$alt = $this->db->sql_fetchfield('reaction_type_title');
+		$this->db->sql_freeresult($result);
+		
+		//Rétrocompatibilité
+		if (!$smiley) {
+			$sql_array = array(
+				'SELECT'	=> 'r.*',
+				'FROM'		=> array('phpbb_reaction_types' => 'r'),
+				'WHERE' => 'r.reaction_type_enable = 1',
+			);
+			
+			$sql = $this->db->sql_build_query('SELECT', $sql_array);
+			$result = $this->db-> sql_query_limit($sql, 1);
+			$smiley = $this->db->sql_fetchfield('reaction_file_name');
+			$alt = $this->db->sql_fetchfield('reaction_type_title');
 		}
-		$title = sprintf($this->language->lang('AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE_TEXT', $smiley, $username));
-		return $title;
+		
+		$reaction = generate_board_url() . '/' . $this->config['reactions_image_path'] . '/' . $smiley;
+
+        return $this->language->lang('AURELIENAZERTY_SITENOTIFICATION_PHOTOLIKE_TEXT', $reaction, $alt, $username);
 	}
 
 	/**
@@ -151,44 +174,44 @@ class photolike extends \phpbb\notification\type\base
 	/**
 	 * Get the id of the notification
 	 *
-	 * @param array $data The type specific data
+	 * @param array $type_data The type specific data
 	 *
 	 * @return int Id of the notification
 	 */
-	public static function get_item_id($data)
+	public static function get_item_id($type_data)
 	{
-		return (int) $data['commentaire_id'];
+		return (int) $type_data['commentaire_id'];
 	}
 
 	/**
 	 * Get the id of the parent
 	 *
-	 * @param array $data The type specific data
+	 * @param array $type_data The type specific data
 	 *
 	 * @return int Id of the parent
 	 */
-	public static function get_item_parent_id($data)
+	public static function get_item_parent_id($type_data)
 	{
-		return (int) $data['photo_id'];
+		return (int) $type_data['photo_id'];
 	}
 
 	/**
 	 * Function for preparing the data for insertion in an SQL query
 	 * (The service handles insertion)
 	 *
-	 * @param array $data The type specific data
+	 * @param array $type_data The type specific data
 	 * @param array $pre_create_data Data from pre_create_insert_array()
 	 */
-	public function create_insert_array($data, $pre_create_data = array())
+	public function create_insert_array($type_data, $pre_create_data = array())
 	{
-		$this->set_data('photo_id', $data['photo_id']);
-		$this->set_data('liker_id', $data['liker_id']);		
-		$this->set_data('commentaire_id', $data['commentaire_id']);
-		$this->set_data('owner_commentaire_id', $data['owner_commentaire_id']);
-		$this->set_data('reaction_type', $data['reaction_type']);
+		$this->set_data('photo_id', $type_data['photo_id']);
+		$this->set_data('liker_id', $type_data['liker_id']);
+		$this->set_data('commentaire_id', $type_data['commentaire_id']);
+		$this->set_data('owner_commentaire_id', $type_data['owner_commentaire_id']);
+		$this->set_data('reaction_type', $type_data['reaction_type']);
 		
 		$this->db->sql_query("SET NAMES 'utf8mb4'");
 
-		parent::create_insert_array($data, $pre_create_data);
+		parent::create_insert_array($type_data, $pre_create_data);
 	}
 }

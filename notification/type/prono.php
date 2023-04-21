@@ -55,17 +55,17 @@ abstract class prono extends \phpbb\notification\type\base
 	/**
 	 * Find the users who want to receive notifications
 	 *
-	 * @param array $data The type specific data
+	 * @param array $type_data The type specific data
 	 * @param array $options Options for finding users for notification
 	 * 		ignore_users => array of users and user types that should not receive notifications from this type because they've already been notified
 	 * 						e.g.: array(2 => array(''), 3 => array('', 'email'), ...)
 	 *
 	 * @return array
 	 */
-	public function find_users_for_notification($data, $options = array())
+	public function find_users_for_notification($type_data, $options = array())
 	{
 		// Return an array of users to be notified, storing the user_ids as the array keys
-		return $this->check_user_notification_options(array($data['user_id']), $options);
+		return $this->check_user_notification_options(array($type_data['user_id']), $options);
 	}
 
 	/**
@@ -126,40 +126,40 @@ abstract class prono extends \phpbb\notification\type\base
 	/**
 	 * Get the id of the notification
 	 *
-	 * @param array $data The type specific data
+	 * @param array $type_data The type specific data
 	 *
 	 * @return int Id of the notification
 	 */
-	public static function get_item_id($data)
+	public static function get_item_id($type_data)
 	{
-		return (int) $data['grille_id'];
+		return (int) $type_data['grille_id'];
 	}
 
 	/**
 	 * Get the id of the parent
 	 *
-	 * @param array $data The type specific data
+	 * @param array $type_data The type specific data
 	 *
 	 * @return int Id of the parent
 	 */
-	public static function get_item_parent_id($data)
+	public static function get_item_parent_id($type_data)
 	{
-		return (int) $data['competition_id'];
+		return (int) $type_data['competition_id'];
 	}
 
 	/**
 	 * Function for preparing the data for insertion in an SQL query
 	 * (The service handles insertion)
 	 *
-	 * @param array $data The type specific data
+	 * @param array $type_data The type specific data
 	 * @param array $pre_create_data Data from pre_create_insert_array()
 	 */
-	public function create_insert_array($data, $pre_create_data = array())
+	public function create_insert_array($type_data, $pre_create_data = array())
 	{
-		$this->set_data('competition_id', $data['competition_id']);
-		$this->set_data('grille_id', $data['grille_id']);		
-		$this->set_data('grille_nom', $data['grille_nom']);
+		$this->set_data('competition_id', $type_data['competition_id']);
+		$this->set_data('grille_id', $type_data['grille_id']);
+		$this->set_data('grille_nom', $type_data['grille_nom']);
 
-		parent::create_insert_array($data, $pre_create_data);
+		parent::create_insert_array($type_data, $pre_create_data);
 	}
 }

@@ -43,8 +43,7 @@ class noprono extends prono
 	 */
 	public function get_title()
 	{
-		$title = sprintf($this->language->lang('AURELIENAZERTY_SITENOTIFICATION_NOPRONO_TEXT', $this->get_data('grille_nom')));
-		return $title;
+        return $this->language->lang('AURELIENAZERTY_SITENOTIFICATION_NOPRONO_TEXT', $this->get_data('grille_nom'));
 	}
 
 }
